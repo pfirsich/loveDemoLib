@@ -146,12 +146,12 @@ do
 	-- overriden functions for playback
 	function demoLib.keyboardIsDown(key)
 		local v = demoLib.downMap.keyboard[key]
-		return v == nil and false or v
+		return v ~= nil and v or false
 	end
 
 	function demoLib.mouseIsDown(button)
 		local v = demoLib.downMap.mouse[button]
-		return v == nil and false or v
+		return v ~= nil and v or false
 	end
 
 	function demoLib.pass() end
@@ -167,11 +167,11 @@ do
 		if mode == "record" then
 			-- find a file to write to
 			for N = 1, 1000 do
-				local fname = filename:gsub("%*", tostring(N))
-				if not love.filesystem.isFile(fname) then
-					demoLib.outputFile, errStr = love.filesystem.newFile(fname, "w")
+				demoLib.outputFileName = filename:gsub("%*", tostring(N))
+				if not love.filesystem.isFile(demoLib.outputFileName) then
+					demoLib.outputFile, errStr = love.filesystem.newFile(demoLib.outputFileName, "w")
 					if demoLib.outputFile == nil then
-						error("demoLib: demo file '" .. fname .. "' could not be opened for writing. Error: " .. errStr)
+						error("demoLib: demo file '" .. demoLib.outputFileName .. "' could not be opened for writing. Error: " .. errStr)
 					end
 					break
 				end
